@@ -69,7 +69,7 @@ $(function() {
          * hiding/showing of the menu element.
          */
          it('has menu element hidden by default', function() {
-           const body = document.querySelector('body');
+           let body = document.querySelector('body');
            expect(body.classList.contains('menu-hidden')).toBe(true);
          });
 
@@ -79,8 +79,8 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
           it('changes visibility when the menu icon is clicked', function() {
-            const body = document.querySelector('body');
-            const icon = document.querySelector('.menu-icon-link');
+            let body = document.querySelector('body');
+            let icon = document.querySelector('.menu-icon-link');
 
             icon.click();
             expect(body.classList.contains('menu-hidden')).toBe(false);
@@ -108,18 +108,42 @@ $(function() {
              done();
            });
          });
-         
+
          it('have at least one entry within feed container', function() {
-           const feedEntries = document.querySelector('.feed').querySelectorAll('.entry');
+           let feedEntries = document.querySelector('.feed').querySelectorAll('.entry');
 
            expect(feedEntries.length).toBeGreaterThan(0);
          });
     });
 
+    /*
+     * "New Feed Selection" test suite
+     */
+
     /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function() {
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+         let prevFeed;
+         let newFeed;
+
+         beforeEach(function(done) {
+           loadFeed(0, function() {
+             prevFeed = document.querySelector('.feed').innerHTML;
+
+             loadFeed(1, function() {
+               newFeed = document.querySelector('.feed').innerHTML;
+               done();
+             });
+           });
+         });
+
+         it('should change feed content', function() {
+           expect(newFeed).not.toEqual(prevFeed);
+         });
+    });
+
 }());
